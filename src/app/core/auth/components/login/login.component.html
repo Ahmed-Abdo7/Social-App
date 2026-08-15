@@ -1,0 +1,71 @@
+<div class="bg-[#0A0A0A] min-h-screen">
+
+    <div class="">
+       <a href="https://ahmed-abdo-full-stack-architect.vercel.app/" target="_blank"> <span class="text-2xl font-extrabold gradient-text font-sans text-[#16A197] cursor-pointer px-4 py-10">AA</span></a>
+    </div>
+    
+    <div class="container px-4  flex flex-col items-center justify-center min-h-[80vh]">
+      <div class="w-full max-w-md">
+        <h1 class="font-bold text-2xl  mb-1 text-[#1ecbbd] ">Sign in to your account</h1>
+        <p class=" text-sm mb-6 text-gray-400">Enter your details to continue</p>
+        <form class="w-full" [formGroup]="loginForm" (submit)="sendLoginData()" >
+            <div class="mt-6">
+                @let emailControl = loginForm.get('email') ;
+               <label for="email" class="main-label">Email</label>
+              <input formControlName="email"
+                type="email"
+                id="email"
+                class="main-input"
+                placeholder="Enter your Email"
+              />
+              @if(emailControl?.invalid && emailControl?.touched){
+                <div class="flex px-2 py-1 mt-0.5 text-base w-[100%] text-red-600 rounded-xs bg-red-300" role="alert">
+              <span class="sr-only">Danger</span>
+              <div>
+                <ul class="list-disc list-inside">
+                  @if(emailControl?.getError('required')){
+                  <li>Email input is required</li>
+                  }
+                  @else if (emailControl?.getError('email')){
+                  <li>Email input should be a valid email</li>
+                  }
+                </ul>
+              </div>
+            </div>
+            }
+            </div>
+            <div class="mt-4">
+                @let passwordControl = loginForm.get('password') ;
+               <label for="password" class="main-label">Password</label>
+              <input formControlName="password"
+                type="password"
+                    id="password"
+                class="main-input"
+                placeholder="Enter your Password"
+              />
+              @if(passwordControl?.invalid && passwordControl?.touched){
+                <div class="flex px-2 py-1 mt-0.5 text-base w-[100%] text-red-600 rounded-xs bg-red-300" role="alert">
+              <span class="sr-only">Danger</span>
+              <div>
+                <ul class="list-disc list-inside">
+                  @if(passwordControl?.getError('required')){
+                  <li>Password input is required</li>
+                  } @else if (passwordControl?.getError('pattern')){
+                  <li>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.</li>
+                  }
+                </ul>
+              </div>
+            </div>
+            }
+            </div>
+             <div class="mt-4">
+            <span class="text-gray-400">You don't have an account?</span> <span class="text-[#16A197] cursor-pointer hover:text-[#1ecbbd] px-2 transition-all duration-300 ease-in-out" (click)="navigateToRegister()" >Sign up</span>
+          </div>
+            <div class="">
+            <button type="submit" class="main-btn">Sign in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+</div>

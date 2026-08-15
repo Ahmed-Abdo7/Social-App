@@ -1,0 +1,92 @@
+<nav class="bg-white fixed w-full z-20 top-0 inset-s-0 border-b border-gray-100 shadow-sm">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
+
+    <!-- القسم الأول: اللوجو واسم الموقع -->
+    <a routerLink="/feed" class="flex items-center gap-3">
+      <!-- شكل اللوجو (مربع أزرق بحواف دائرية) -->
+      <div
+        class="bg-[#002f87] text-white text-2xs font-extrabold w-10 h-10 flex items-center justify-center rounded-xl">
+        ROUTE
+      </div>
+      <!-- اسم الموقع (بيظهر في الشاشات الكبيرة وبيختفي في الموبايل) -->
+      <span class="hidden md:block text-xl font-extrabold text-[#001b4e] tracking-tight">Route Posts</span>
+    </a>
+
+    <!-- القسم التاني: لينكات التصفح -->
+    <!-- حاوية على شكل كبسولة رمادي فاتح -->
+    <div class="flex items-center bg-slate-50 border border-slate-200 rounded-full p-1 gap-1">
+
+
+      <!-- لينك الـ Feed -->
+      <a routerLink="/feed" routerLinkActive="bg-rose-200 text-blue-600 shadow-sm"
+        class="flex items-center gap-2 px-4 py-2 rounded-full text-slate-500 hover:bg-slate-100 transition-all cursor-pointer">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="hidden md:block font-bold text-sm">Feed</span>
+      </a>
+
+      <!-- لينك الـ Profile -->
+      <a routerLink="/profile" routerLinkActive="bg-white text-blue-600 shadow-sm"
+        class="flex items-center gap-2 px-4 py-2 rounded-full text-slate-500 hover:bg-slate-100 transition-all cursor-pointer">
+        <i class="fa-regular fa-user text-lg"></i>
+        <span class="hidden md:block font-bold text-sm">Profile</span>
+      </a>
+
+      <!-- لينك الـ Notifications -->
+      <a routerLink="/notifications" routerLinkActive="bg-white text-blue-600 shadow-sm"
+        class="relative flex items-center gap-2 px-4 py-2 rounded-full text-slate-500 hover:bg-slate-100 transition-all cursor-pointer leading-2 ">
+        <i class="fa-regular fa-comment text-lg"></i>
+        <span class="hidden md:block font-bold text-sm">Notifications</span>
+        <div
+          class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-danger border-2 border-buffer rounded-full -top-2 -inset-e-2">
+          {{unreadCount}}
+        </div>
+      </a>
+
+
+    </div>
+
+    <div class="relative">
+
+      <!-- زرار المستخدم (الكبسولة) -->
+      <button (click)="isDropdownOpen = !isDropdownOpen"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-full p-1 pr-4 hover:shadow-sm transition-all cursor-pointer">
+        <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Ahmed Abdo"
+          class="w-9 h-9 rounded-full object-cover">
+        <span class="hidden md:block font-bold text-slate-800 text-sm">Ahmed Abdo</span>
+        <i class="fa-solid fa-bars text-slate-500 text-lg ml-1"></i>
+      </button>
+
+      <!-- القائمة المنسدلة (Dropdown Menu) -->
+      @if (isDropdownOpen) {
+      <div
+        class="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-slate-100 py-3 z-50 flex flex-col gap-1">
+
+        <!-- خيار Profile -->
+        <a routerLink="/profile" (click)="isDropdownOpen = false"
+          class="flex items-center gap-3 px-4 py-2 mx-2 rounded-xl text-slate-700 hover:bg-slate-50 hover:text-[#002f87] transition-colors cursor-pointer">
+          <i class="fa-regular fa-user text-lg"></i>
+          <span class="font-medium text-sm">Profile</span>
+        </a>
+
+        <!-- خيار Settings -->
+        <a routerLink="/settings" (click)="isDropdownOpen = false"
+          class="flex items-center gap-3 px-4 py-2 mx-2 rounded-xl text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
+          <i class="fa-solid fa-gear text-lg"></i>
+          <span class="font-medium text-sm">Settings</span>
+        </a>
+
+        <!-- الخط الفاصل -->
+        <hr class="my-1 border-slate-100 mx-4">
+
+        <!-- خيار Logout -->
+        <button (click)="removeToken(); isDropdownOpen = false" routerLink="/login"
+          class="w-full flex items-center px-4 py-2 mx-2 rounded-xl text-[#e11d48] hover:bg-rose-50 transition-colors cursor-pointer text-left font-medium text-sm">
+          Logout
+        </button>
+
+      </div>
+      }
+
+    </div>
+  </div>
+</nav>

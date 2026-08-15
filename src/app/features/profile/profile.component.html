@@ -1,0 +1,128 @@
+@if (usersList()) {
+  <div class="container grid grid-rows-12 relative">
+    <div
+      (mouseenter)="toggle()"
+      (mouseleave)="toggle()"
+      class="mt-8 relative bg-gradient-to-r from-blue-900 to-blue-500 h-64 rounded-top row-span-12"
+    >
+      @if (flag) {
+        <button
+          class="bg-[#263846] text-white text-xs font-bold absolute top-4 right-4 px-2 py-1 rounded hover:bg-[#263846]/80 transition-all duration-300 ease-in-out"
+        >
+          <i class="fa-regular fa-camera"></i> Add Cover
+        </button>
+      }
+      <button
+        class="lg:hidden lg:block bg-[#263846] text-white text-xs font-bold absolute top-4 right-4 px-2 py-1 rounded hover:bg-[#263846]/80 transition-all duration-300 ease-in-out"
+      >
+        <i class="fa-regular fa-camera"></i> Add Cover
+      </button>
+    </div>
+    <div class="bg-white rounded-buttom h-130 lg:h-77 row-span-12"></div>
+
+    <div class="absolute bg-white top-50 left-5 lg:left-16 rounded z-10 w-[90%]">
+      <div class="p-4 flex flex-col lg:flex-row items-center justify-between">
+        <div
+          class="w-full h-full lg:w-[30%] flex flex-wrap items-center justify-center lg:justify-start gap-x-4"
+        >
+          <label for="photoInput" class="relative group cursor-pointer block">
+            <img
+              class="w-32 h-32 rounded-full shadow-lg object-cover"
+              [src]="usersList()?.photo"
+              alt="صورة شخص افتراضي"
+            />
+
+            <!-- طبقة الكاميرا والشفافية عند الهوفر -->
+            <div
+              class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center"
+            >
+              <i class="fa-solid fa-camera text-white text-xl"></i>
+            </div>
+
+            <!-- Input إدخال الملف المخفي -->
+            <input
+              id="photoInput"
+              type="file"
+              accept="image/*"
+              (change)="selectFile($event)"
+              class="hidden"
+            />
+          </label>
+
+          <div class="text-black">
+            <h2 class="text-lg font-bold">{{ usersList()?.name }}</h2>
+            <p class="text-lg font-bold text-gray-500">@{{ usersList()?.username }}</p>
+          </div>
+        </div>
+
+        <div
+          class="w-full h-full lg:w-[70%] flex-wrap flex items-center justify-center lg:justify-end gap-x-8"
+        >
+          <div class="py-2 lg:px-4 rounded-sm shadow my-4 text-center flex flex-col min-w-[80px]">
+            <span class="text-sm font-bold mx-2 text-gray-500">Followers</span>
+            <span class="text-lg mx-2">{{ usersList()?.followersCount }}</span>
+          </div>
+          <div class="py-2 lg:px-4 rounded-sm shadow my-4 text-center flex flex-col min-w-[80px]">
+            <span class="text-sm font-bold mx-2 text-gray-500">Following</span>
+            <span class="text-lg mx-2">{{ usersList()?.followingCount }}</span>
+          </div>
+          <div class="py-2 lg:px-4 rounded-sm shadow my-4 text-center flex flex-col min-w-[80px]">
+            <span class="text-sm font-bold mx-2 text-gray-500">Bookmarks</span>
+            <span class="text-lg mx-2">{{ usersList()?.bookmarksCount }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:flex lg:flex-wrap lg:gap-x-4">
+        <div class="lg:w-[66%] bg-[#F8FAFC] rounded-sm border border-gray-300 shadow m-3">
+          <span class="text-lg font-bold m-4">About me</span>
+          <p class="m-2"><i class="fa-regular fa-envelope m-2"> </i> {{ usersList()?.email }}</p>
+          <p class="m-2"><i class="fa-solid fa-user m-2"></i> Active on Route Posts</p>
+        </div>
+        <div class="lg:w-[30%]">
+          <div class="lg:flex lg:flex-col">
+            <div
+              class="flex flex-col rounded-sm border border-gray-300 shadow m-3 p-3 bg-[#F6FAFF]"
+            >
+              <span class="text-lg font-bold mx-4 text-blue-700">My posts</span>
+              <span class="text-lg font-bold mx-4 text-black">{{ postList().length }}</span>
+            </div>
+            <div
+              class="flex flex-col rounded-sm border border-gray-300 shadow m-3 p-3 bg-[#F6FAFF]"
+            >
+              <span class="text-lg font-bold mx-4 text-blue-700">Saved posts</span>
+              <span class="text-lg font-bold mx-4 text-black">{{ savedpostlist().length }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap my-4 mx-4 bg-white rounded shadow p-2 lg:w-[83%] mx-auto w-[92%]">
+    <div class="flex flex-wrap bg-gray-200 rounded shadow p-2">
+      <button
+        [class]="mypostsflag() ? 'bg-white' : ''"
+        (click)="toggleMyPosts()"
+        class="mx-4 p-2 rounded hover:bg-gray-300 cursor-pointer"
+      >
+        <i class="fa-solid fa-pen"></i> My posts
+      </button>
+      <button
+        [class]="savedpostflag() ? 'bg-white' : ''"
+        (click)="toggleSavedPosts()"
+        class="mx-4 p-2 rounded hover:bg-gray-300 cursor-pointer"
+      >
+        <i class="fa-solid fa-pen"></i> Saved posts
+      </button>
+    </div>
+  </div>
+
+  <div class="my-4 mx-4 bg-white rounded shadow p-2 lg:w-[83%] mx-auto w-[92%]">
+    @if (mypostsflag()) {
+      <app-card-post [postList]="postList()"></app-card-post>
+    } @else if (savedpostflag()) {
+      <app-card-post [postList]="savedpostlist()"></app-card-post>
+    }
+  </div>
+}
