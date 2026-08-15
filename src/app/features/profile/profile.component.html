@@ -1,128 +1,263 @@
 @if (usersList()) {
-  <div class="container grid grid-rows-12 relative">
-    <div
-      (mouseenter)="toggle()"
-      (mouseleave)="toggle()"
-      class="mt-8 relative bg-gradient-to-r from-blue-900 to-blue-500 h-64 rounded-top row-span-12"
-    >
-      @if (flag) {
+  <div class="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
+    <!-- Header Section Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+      <!-- Cover Banner -->
+      <div
+        (mouseenter)="toggle()"
+        (mouseleave)="toggle()"
+        class="relative w-full h-44 sm:h-64 md:h-72 bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-600 transition-all"
+      >
+        <!-- Overlay decorative ambient pattern -->
+        <div
+          class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-black/30"
+        ></div>
+
+        <!-- Add Cover Button -->
         <button
-          class="bg-[#263846] text-white text-xs font-bold absolute top-4 right-4 px-2 py-1 rounded hover:bg-[#263846]/80 transition-all duration-300 ease-in-out"
+          class="absolute top-4 right-4 bg-black/40 hover:bg-black/60 text-white backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all shadow-sm cursor-pointer border border-white/20"
+          [class.opacity-100]="flag"
+          [class.opacity-90]="!flag"
         >
-          <i class="fa-regular fa-camera"></i> Add Cover
+          <i class="fa-regular fa-camera text-sm"></i>
+          <span>Add Cover</span>
         </button>
-      }
-      <button
-        class="lg:hidden lg:block bg-[#263846] text-white text-xs font-bold absolute top-4 right-4 px-2 py-1 rounded hover:bg-[#263846]/80 transition-all duration-300 ease-in-out"
-      >
-        <i class="fa-regular fa-camera"></i> Add Cover
-      </button>
-    </div>
-    <div class="bg-white rounded-buttom h-130 lg:h-77 row-span-12"></div>
+      </div>
 
-    <div class="absolute bg-white top-50 left-5 lg:left-16 rounded z-10 w-[90%]">
-      <div class="p-4 flex flex-col lg:flex-row items-center justify-between">
+      <!-- Profile Info & Avatar Header -->
+      <div class="px-4 sm:px-8 pb-6">
+        <!-- Avatar & Main Meta Row -->
         <div
-          class="w-full h-full lg:w-[30%] flex flex-wrap items-center justify-center lg:justify-start gap-x-4"
+          class="flex flex-col md:flex-row md:items-end md:justify-between border-b border-slate-100 pb-6"
         >
-          <label for="photoInput" class="relative group cursor-pointer block">
-            <img
-              class="w-32 h-32 rounded-full shadow-lg object-cover"
-              [src]="usersList()?.photo"
-              alt="صورة شخص افتراضي"
-            />
+          <!-- Left Side: Avatar + Name + Username -->
+          <div
+            class="flex flex-col sm:flex-row items-center sm:items-end gap-4 text-center sm:text-left -mt-14 sm:-mt-20 relative z-10"
+          >
+            <!-- Avatar Container -->
+            <label for="photoInput" class="relative group cursor-pointer shrink-0">
+              <img
+                class="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-white shadow-md object-cover bg-slate-100 transition-transform group-hover:scale-[1.02]"
+                [src]="
+                  usersList()?.photo ||
+                  'https://flowbite.com/docs/images/people/profile-picture-5.jpg'
+                "
+                alt="Profile picture"
+              />
 
-            <!-- طبقة الكاميرا والشفافية عند الهوفر -->
+              <!-- Overlay for Camera Upload -->
+              <div
+                class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white"
+              >
+                <i class="fa-solid fa-camera text-xl sm:text-2xl mb-0.5"></i>
+                <span class="text-[11px] font-medium">Edit photo</span>
+              </div>
+
+              <!-- Hidden File Input -->
+              <input
+                id="photoInput"
+                type="file"
+                accept="image/*"
+                (change)="selectFile($event)"
+                class="hidden"
+              />
+            </label>
+
+            <!-- Name and Handle -->
+            <div class="mt-2 sm:mt-0 sm:mb-2">
+              <h1
+                class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight"
+              >
+                {{ usersList()?.name }}
+              </h1>
+              <p class="text-sm font-semibold text-slate-500 mt-0.5">
+                &#64;{{ usersList()?.username }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Side: Stats (Followers, Following, Bookmarks) -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-6 md:mt-0 w-full md:w-auto shrink-0">
+            <!-- Followers -->
             <div
-              class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center"
+              class="flex flex-col items-center justify-center p-3 sm:px-5 sm:py-3 bg-slate-50 border border-slate-200/70 rounded-xl hover:bg-blue-50/50 hover:border-blue-200 transition-all cursor-default group"
             >
-              <i class="fa-solid fa-camera text-white text-xl"></i>
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >Followers</span
+              >
+              <span
+                class="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors mt-0.5"
+              >
+                {{ usersList()?.followersCount || 0 }}
+              </span>
             </div>
 
-            <!-- Input إدخال الملف المخفي -->
-            <input
-              id="photoInput"
-              type="file"
-              accept="image/*"
-              (change)="selectFile($event)"
-              class="hidden"
-            />
-          </label>
+            <!-- Following -->
+            <div
+              class="flex flex-col items-center justify-center p-3 sm:px-5 sm:py-3 bg-slate-50 border border-slate-200/70 rounded-xl hover:bg-blue-50/50 hover:border-blue-200 transition-all cursor-default group"
+            >
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                >Following</span
+              >
+              <span
+                class="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors mt-0.5"
+              >
+                {{ usersList()?.followingCount || 0 }}
+              </span>
+            </div>
 
-          <div class="text-black">
-            <h2 class="text-lg font-bold">{{ usersList()?.name }}</h2>
-            <p class="text-lg font-bold text-gray-500">@{{ usersList()?.username }}</p>
+            <!-- Bookmarks -->
+            <div
+              class="flex flex-col items-center justify-center p-3 sm:px-5 sm:py-3 bg-slate-50 border border-slate-200/70 rounded-xl hover:bg-blue-50/50 hover:border-blue-200 transition-all cursor-default group"
+            >
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Saved</span>
+              <span
+                class="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors mt-0.5"
+              >
+                {{ usersList()?.bookmarksCount || 0 }}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div
-          class="w-full h-full lg:w-[70%] flex-wrap flex items-center justify-center lg:justify-end gap-x-8"
-        >
-          <div class="py-2 lg:px-4 rounded-sm shadow my-4 text-center flex flex-col min-w-[80px]">
-            <span class="text-sm font-bold mx-2 text-gray-500">Followers</span>
-            <span class="text-lg mx-2">{{ usersList()?.followersCount }}</span>
+        <!-- About Me & Quick Stats Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
+          <!-- About Me Card -->
+          <div class="lg:col-span-2 bg-slate-50/80 border border-slate-200/80 rounded-xl p-4 sm:p-5">
+            <h2
+              class="flex items-center gap-2 text-base font-bold text-slate-800 mb-3 pb-2 border-b border-slate-200/60"
+            >
+              <i class="fa-solid fa-circle-info text-blue-600"></i>
+              <span>About me</span>
+            </h2>
+            <div class="space-y-2 text-sm text-slate-600">
+              <div class="flex items-center gap-3 py-1">
+                <i class="fa-regular fa-envelope text-slate-400 w-5 text-center text-base"></i>
+                <span class="font-medium text-slate-700">{{ usersList()?.email }}</span>
+              </div>
+              <div class="flex items-center gap-3 py-1">
+                <i class="fa-solid fa-user-check text-emerald-500 w-5 text-center text-base"></i>
+                <span class="font-medium text-slate-700">Active on Route Posts</span>
+              </div>
+            </div>
           </div>
-          <div class="py-2 lg:px-4 rounded-sm shadow my-4 text-center flex flex-col min-w-[80px]">
-            <span class="text-sm font-bold mx-2 text-gray-500">Following</span>
-            <span class="text-lg mx-2">{{ usersList()?.followingCount }}</span>
-          </div>
-          <div class="py-2 lg:px-4 rounded-sm shadow my-4 text-center flex flex-col min-w-[80px]">
-            <span class="text-sm font-bold mx-2 text-gray-500">Bookmarks</span>
-            <span class="text-lg mx-2">{{ usersList()?.bookmarksCount }}</span>
+
+          <!-- Quick Counters (My Posts & Saved Posts) -->
+          <div class="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-3">
+            <!-- My Posts Count Card -->
+            <div
+              class="bg-blue-50/70 border border-blue-100 rounded-xl p-4 flex items-center justify-between"
+            >
+              <div class="flex items-center gap-2.5">
+                <div
+                  class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs"
+                >
+                  <i class="fa-solid fa-pen-to-square text-xs"></i>
+                </div>
+                <span class="text-sm font-bold text-blue-950">My Posts</span>
+              </div>
+              <span class="text-xl font-black text-blue-600">{{ postList().length }}</span>
+            </div>
+
+            <!-- Saved Posts Count Card -->
+            <div
+              class="bg-amber-50/70 border border-amber-100 rounded-xl p-4 flex items-center justify-between"
+            >
+              <div class="flex items-center gap-2.5">
+                <div
+                  class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shadow-xs"
+                >
+                  <i class="fa-solid fa-bookmark text-xs"></i>
+                </div>
+                <span class="text-sm font-bold text-amber-950">Saved Posts</span>
+              </div>
+              <span class="text-xl font-black text-amber-600">{{ savedpostlist().length }}</span>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="lg:flex lg:flex-wrap lg:gap-x-4">
-        <div class="lg:w-[66%] bg-[#F8FAFC] rounded-sm border border-gray-300 shadow m-3">
-          <span class="text-lg font-bold m-4">About me</span>
-          <p class="m-2"><i class="fa-regular fa-envelope m-2"> </i> {{ usersList()?.email }}</p>
-          <p class="m-2"><i class="fa-solid fa-user m-2"></i> Active on Route Posts</p>
-        </div>
-        <div class="lg:w-[30%]">
-          <div class="lg:flex lg:flex-col">
-            <div
-              class="flex flex-col rounded-sm border border-gray-300 shadow m-3 p-3 bg-[#F6FAFF]"
-            >
-              <span class="text-lg font-bold mx-4 text-blue-700">My posts</span>
-              <span class="text-lg font-bold mx-4 text-black">{{ postList().length }}</span>
-            </div>
-            <div
-              class="flex flex-col rounded-sm border border-gray-300 shadow m-3 p-3 bg-[#F6FAFF]"
-            >
-              <span class="text-lg font-bold mx-4 text-blue-700">Saved posts</span>
-              <span class="text-lg font-bold mx-4 text-black">{{ savedpostlist().length }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="flex flex-wrap my-4 mx-4 bg-white rounded shadow p-2 lg:w-[83%] mx-auto w-[92%]">
-    <div class="flex flex-wrap bg-gray-200 rounded shadow p-2">
+    <!-- Navigation Tabs Bar -->
+    <div
+      class="bg-white border border-slate-200/80 rounded-2xl shadow-sm p-1.5 flex items-center gap-2"
+    >
+      <!-- My Posts Tab -->
       <button
-        [class]="mypostsflag() ? 'bg-white' : ''"
         (click)="toggleMyPosts()"
-        class="mx-4 p-2 rounded hover:bg-gray-300 cursor-pointer"
+        class="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all cursor-pointer"
+        [class]="
+          mypostsflag()
+            ? 'bg-blue-600 text-white shadow-sm'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+        "
       >
-        <i class="fa-solid fa-pen"></i> My posts
+        <i class="fa-solid fa-pen-to-square text-sm"></i>
+        <span>My posts</span>
+        <span
+          class="px-2 py-0.5 text-xs rounded-full font-extrabold"
+          [class]="mypostsflag() ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'"
+        >
+          {{ postList().length }}
+        </span>
       </button>
+
+      <!-- Saved Posts Tab -->
       <button
-        [class]="savedpostflag() ? 'bg-white' : ''"
         (click)="toggleSavedPosts()"
-        class="mx-4 p-2 rounded hover:bg-gray-300 cursor-pointer"
+        class="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all cursor-pointer"
+        [class]="
+          savedpostflag()
+            ? 'bg-blue-600 text-white shadow-sm'
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+        "
       >
-        <i class="fa-solid fa-pen"></i> Saved posts
+        <i class="fa-solid fa-bookmark text-sm"></i>
+        <span>Saved posts</span>
+        <span
+          class="px-2 py-0.5 text-xs rounded-full font-extrabold"
+          [class]="savedpostflag() ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'"
+        >
+          {{ savedpostlist().length }}
+        </span>
       </button>
     </div>
-  </div>
 
-  <div class="my-4 mx-4 bg-white rounded shadow p-2 lg:w-[83%] mx-auto w-[92%]">
-    @if (mypostsflag()) {
-      <app-card-post [postList]="postList()"></app-card-post>
-    } @else if (savedpostflag()) {
-      <app-card-post [postList]="savedpostlist()"></app-card-post>
-    }
+    <!-- Posts Content Feed -->
+    <div>
+      @if (mypostsflag()) {
+        @if (postList().length > 0) {
+          <app-card-post [postList]="postList()"></app-card-post>
+        } @else {
+          <div
+            class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center shadow-sm my-4"
+          >
+            <div
+              class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-500"
+            >
+              <i class="fa-solid fa-pen-to-square text-2xl"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800">No posts yet</h3>
+            <p class="text-xs text-slate-500 mt-1">You haven't created any posts yet.</p>
+          </div>
+        }
+      } @else if (savedpostflag()) {
+        @if (savedpostlist().length > 0) {
+          <app-card-post [postList]="savedpostlist()"></app-card-post>
+        } @else {
+          <div
+            class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center shadow-sm my-4"
+          >
+            <div
+              class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-3 text-amber-500"
+            >
+              <i class="fa-solid fa-bookmark text-2xl"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800">No saved posts</h3>
+            <p class="text-xs text-slate-500 mt-1">Bookmarks you save will appear here.</p>
+          </div>
+        }
+      }
+    </div>
   </div>
 }
