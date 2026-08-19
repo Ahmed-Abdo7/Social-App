@@ -24,4 +24,7 @@ export class PostsServer {
     putPostLike(postId : string):Observable<LikedPostResponse>{
         return this.httpClient.put<LikedPostResponse>(environment.base_url+'/posts/'+postId+'/like', {});
     }
+    putPostBookMark(postId : string):Observable<any>{
+        return this.httpClient.put<any>(`${environment.base_url}/posts/${postId}/bookmark`, {});
+    }
 }

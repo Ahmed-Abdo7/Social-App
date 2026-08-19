@@ -1,28 +1,9 @@
 <section class="grid grid-cols-12 gap-4 lg:mt-16">
-  <div class="col-span-12 lg:col-span-9">
-    <app-create-post ngSkipHydration></app-create-post>
+  <div class="col-span-12 lg:col-span-9 flex flex-col">
+    <app-create-post class="order-1" ngSkipHydration></app-create-post>
 
-    <!-- div under create-post to make a single post in it , it will take place between create post and suggestions  -->
-    <div class="w-full lg:w-2/3 mx-auto mt-6 order-12">
-      @for (post of postList(); track post._id) {
-        <app-single-post [post]="post" ngSkipHydration></app-single-post>
-      }
-    </div>
-  </div>
-  <div
-    class="col-span-12 lg:block lg:col-span-3 py-3 rounded-base lg:sticky lg:top-24 lg:self-start bg-white"
-  >
-    <div class="hidden lg:block">
-      <h2 class="font-bold text-xl leading-12">
-        <i class="fa-solid fa-user-group text-blue-500"></i> Suggestions
-      </h2>
-      <div
-        class="w-full mt-2 rounded-base shadow-sm bg-base-100 p-2 overflow-y-auto max-h-[calc(100vh-12rem)]"
-      >
-        <app-suggestions ngSkipHydration></app-suggestions>
-      </div>
-    </div>
-    <div class="lg:hidden order-1 bg-white">
+    <!-- Suggestions for mobile displayed between create post and posts list using order-2 -->
+    <div class="lg:hidden order-2 my-4 bg-white py-3 rounded-base">
       <div class="flex items-center justify-between">
         <h2 class="text-xl font-bold px-4 leading">Suggestions</h2>
         <span (click)="flag = !flag" class="text-primary text-sm px-4 font-bold cursor-pointer">{{
@@ -36,5 +17,26 @@
         </div>
       }
     </div>
+
+    <!-- Posts container displayed after suggestions using order-3 -->
+    <div class="w-full lg:w-2/3 mx-auto mt-6 order-3">
+      @for (post of postList(); track post._id) {
+        <app-single-post [post]="post" ngSkipHydration></app-single-post>
+      }
+    </div>
+  </div>
+
+  <div
+    class="hidden lg:block lg:col-span-3 py-3 rounded-base lg:sticky lg:top-24 lg:self-start bg-white"
+  >
+    <h2 class="font-bold text-xl leading-12">
+      <i class="fa-solid fa-user-group text-blue-500"></i> Suggestions
+    </h2>
+    <div
+      class="w-full mt-2 rounded-base shadow-sm bg-base-100 p-2 overflow-y-auto max-h-[calc(100vh-12rem)]"
+    >
+      <app-suggestions ngSkipHydration></app-suggestions>
+    </div>
   </div>
 </section>
+

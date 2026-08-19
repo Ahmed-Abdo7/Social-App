@@ -1,8 +1,9 @@
-import { Component, inject, input, signal } from '@angular/core';
-import { Post } from '../../../core/models/posts.interface';
 import { DatePipe } from '@angular/common';
-import { PostsServer } from '../../../core/services/post/posts.server';
+import { afterNextRender, Component, inject, input, signal } from '@angular/core';
+import { initFlowbite } from 'flowbite';
 import { Like } from '../../../core/models/likes-data.interface';
+import { Post } from '../../../core/models/posts.interface';
+import { PostsServer } from '../../../core/services/post/posts.server';
 import { FollowingServer } from '../../../features/services/following.server';
 import { CommentsComponent } from './comments/comments.component';
 
@@ -12,12 +13,20 @@ import { CommentsComponent } from './comments/comments.component';
   templateUrl: './single-post.component.html',
   styleUrl: './single-post.component.css',
 })
-export class SinglePostComponent {
-    private readonly followingServer = inject(FollowingServer) ;
+export class SinglePostComponent  {
+
+  constructor() {
+    afterNextRender(() => {
+      initFlowbite();
+    });
+  }
+
+
+  private readonly followingServer = inject(FollowingServer);
   private readonly postsService = inject(PostsServer);
   post = input.required<Post>();
   isLiked = signal(false);
-
+   
   // Likes modal state
   likes = signal<Like[]>([]);
   isLoadingLikes = signal(false);
@@ -62,6 +71,14 @@ export class SinglePostComponent {
   toggleCommentsModal(){
     this.showCommentsModal.set(!this.showCommentsModal());
   }
-    
+  isBookmarked = signal(false);
+  putBookMark(postId:string){
+    this.postsService.putPostBookMark(postId).subscribe({
+      next:(res)=>{
+        this.isBookmarked.set(res.data.bookmarked);
+        
+      }
+    })
+  }
 }
 

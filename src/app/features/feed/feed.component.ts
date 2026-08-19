@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal, WritableSignal } from '@angular/core';
+import { afterNextRender, Component, inject, OnInit, PLATFORM_ID, signal, WritableSignal } from '@angular/core';
 import { Post } from '../../core/models/posts.interface';
 import { PostsServer } from '../../core/services/post/posts.server';
 import { CreatePostComponent } from '../../shared/components/create-post/create-post.component';
@@ -6,6 +6,7 @@ import { SuggestionsComponent } from "./suggestions/suggestions.component";
 import { SinglePostComponent } from '../../shared/components/single-post/single-post.component';
 import { isPlatformBrowser } from '@angular/common';
 import { NotificationsServer } from '../services/notifications.server';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-feed',
@@ -19,11 +20,12 @@ export class FeedComponent implements OnInit{
   flag:boolean = false;
   postList: WritableSignal<Post[]> = signal([]);
     private readonly platformId = inject(PLATFORM_ID);
+   
  ngOnInit() {
     // تشغيل جلب المنشورات فقط في المتصفح
     if (isPlatformBrowser(this.platformId)) {
-      this.getAllPost();
-      this.getunreadCoutNotifications() ; 
+        this.getAllPost();
+        this.getunreadCoutNotifications() ; 
     }
     
   }
