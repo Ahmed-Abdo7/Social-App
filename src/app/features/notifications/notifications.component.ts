@@ -1,7 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { NotificationsServer } from '../services/notifications.server';
 import { Notification } from '../models/notifications.interface';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-notifications',
@@ -14,11 +14,15 @@ export class NotificationsComponent implements OnInit{
 
  // false = All, true = Unread
   flag: boolean = false; 
+  private readonly plat_id = inject(PLATFORM_ID) ; 
 
   setFilter(isUnread: boolean) {
     this.flag = isUnread;
   }
   ngOnInit(): void {
+    if(isPlatformBrowser(this.plat_id)){
+      localStorage.removeItem('unreadCount');
+    }
     this.getAllNotifications();
   }
   notifications = signal<Notification[]>([]);

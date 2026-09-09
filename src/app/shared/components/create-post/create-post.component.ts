@@ -1,9 +1,9 @@
 
-import { afterNextRender, Component, inject } from '@angular/core';
+import { afterNextRender, Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
-import { PostsServer } from '../../../core/services/post/posts.server';
 import { ToastrService } from 'ngx-toastr';
+import { PostsServer } from '../../../core/services/post/posts.server';
 
 @Component({
   selector: 'app-create-post',
@@ -13,8 +13,12 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CreatePostComponent {
   
-    private readonly postsServer = inject(PostsServer)
+    private readonly postsServer = inject(PostsServer);
     private readonly toasts = inject(ToastrService);
+
+ @Input() username: string = '';
+@Input() photo: string = '';
+
     
     constructor() {
       afterNextRender(() => {

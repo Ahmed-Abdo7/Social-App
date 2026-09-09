@@ -8,17 +8,17 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent  {
+export class NavbarComponent {
   isDropdownOpen: boolean = false;
   private readonly router = inject(Router)
-   private readonly plat_id = inject(PLATFORM_ID) ; 
- 
-  unreadCount : any = 0  ; 
- constructor() {
+  private readonly plat_id = inject(PLATFORM_ID);
+
+  unreadCount: any = 0;
+  constructor() {
     afterNextRender(() => {
       initFlowbite(); // يعمل بأمان بعد انتهاء الهيدريشن تماماً
     });
-    if(isPlatformBrowser(this.plat_id)){
+    if (isPlatformBrowser(this.plat_id)) {
      this.unreadCount = localStorage.getItem('unreadCount')
     }
   }

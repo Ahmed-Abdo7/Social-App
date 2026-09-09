@@ -1,18 +1,50 @@
+@for (follow of following(); track follow._id) {
+  <div
+    class="group flex items-center justify-between gap-3 p-2 rounded-xl hover:bg-slate-50/80 transition-all duration-200"
+  >
+    <!-- صورة المستخدم والبيانات -->
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="relative shrink-0">
+        <img
+          [src]="follow.photo"
+          [alt]="follow.name"
+          class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-100 shadow-xs group-hover:ring-blue-100 transition-all"
+        />
+      </div>
 
-@for(follow of following() ; track follow._id){
-    <div class="bg-gray-100 rounded-md px-2 py-1.5 my-1">
-     <div class="flex items-center justify-between gap-2 w-full py-2 ">
-    <div class="flex items-center gap-2  ">
-        <img src="{{follow.photo}}" alt="" class="w-8 h-8 rounded-full">
-        <div class="flex flex-col">
-            <span class="text-sm">{{follow.name}}</span>
-            <span class="text-xs text-gray-500">@{{follow.username}}</span>
-            <span class="text-xs text-gray-500 ">{{follow.mutualFollowersCount}} mutual friends</span>
-        </div>
+      <div class="flex flex-col min-w-0">
+        <span
+          class="text-xs font-bold text-slate-800 truncate hover:text-blue-600 cursor-pointer transition-colors"
+        >
+          {{ follow.name }}
+        </span>
+        <span class="text-[11px] text-slate-400 truncate"> @{{ follow.username }} </span>
+        @if (follow.mutualFollowersCount) {
+          <span class="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
+            <i class="fa-solid fa-user-group text-[9px] text-blue-400"></i>
+            {{ follow.mutualFollowersCount }} mutual
+          </span>
+        }
+      </div>
     </div>
-    <div (click)="followUser(follow._id)" class=" cursor-pointer text-blue-500 hover:text-white hover:bg-sky-600 bg-sky-200 transition-all px-1 py-2 rounded-base ">
-        <i class="fa-solid fa-user-plus"></i>Follow
+
+    <!-- زر Follow بتصميم Pill عصري وتأثير تفاعلي -->
+    <button
+      (click)="followUser(follow._id)"
+      class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-200 cursor-pointer shadow-2xs"
+    >
+      <i class="fa-solid fa-plus text-[10px]"></i>
+      <span>Follow</span>
+    </button>
+  </div>
+} @empty {
+  <!-- حالة عدم وجود اقتراحات (Empty State) شيك جداً -->
+  <div class="py-8 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
+    <div
+      class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400"
+    >
+      <i class="fa-solid fa-user-check text-lg"></i>
     </div>
-</div>
-</div>
+    <p class="text-xs font-medium">No new suggestions right now</p>
+  </div>
 }

@@ -7,6 +7,7 @@ import { SinglePostComponent } from '../../shared/components/single-post/single-
 import { isPlatformBrowser } from '@angular/common';
 import { NotificationsServer } from '../services/notifications.server';
 import { initFlowbite } from 'flowbite';
+import { ProfileServer } from '../services/profile.server';
 
 @Component({
   selector: 'app-feed',
@@ -16,19 +17,34 @@ import { initFlowbite } from 'flowbite';
 })
 export class FeedComponent implements OnInit{
   private readonly postServer = inject(PostsServer) ; 
-  private readonly notificationsServer = inject(NotificationsServer)
+  private readonly notificationsServer = inject(NotificationsServer) ; 
+  private readonly profileServer = inject(ProfileServer);
   flag:boolean = false;
   postList: WritableSignal<Post[]> = signal([]);
     private readonly platformId = inject(PLATFORM_ID);
+
+    name: WritableSignal<string> = signal('');
+    photo: WritableSignal<string> = signal('');
    
  ngOnInit() {
     // تشغيل جلب المنشورات فقط في المتصفح
     if (isPlatformBrowser(this.platformId)) {
         this.getAllPost();
-        this.getunreadCoutNotifications() ; 
+        this.getunreadCoutNotifications() ;
+        this.getProfile();
     }
     
   }
+
+  getProfile(){
+  this.profileServer.getProfile().subscribe({
+    next: (res) => {
+       this.name.set(res.data.user.name);
+       this.photo.set(res.data.user.photo);
+    },
+  })
+}
+
   getAllPost(){
     this.postServer.getAllPost().subscribe({
       next:(res)=>{
