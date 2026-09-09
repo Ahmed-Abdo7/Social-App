@@ -76,7 +76,6 @@ export class SinglePostComponent  {
     this.postsService.putPostBookMark(postId).subscribe({
       next:(res)=>{
         this.isBookmarked.set(res.data.bookmarked);
-        
       }
     })
   }

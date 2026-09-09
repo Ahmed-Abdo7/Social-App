@@ -46,6 +46,11 @@ export const routes: Routes = [
                 path : 'notifications',
                 loadComponent : () => import('./features/notifications/notifications.component').then(m => m.NotificationsComponent) ,
                 title : 'Notifications'
+            },
+            {
+                path : 'change-password',
+                loadComponent : () => import('./features/change-password/change-password.component').then(m => m.ChangePasswordComponent) ,
+                title : 'Change Password'
             }
         ]
     }

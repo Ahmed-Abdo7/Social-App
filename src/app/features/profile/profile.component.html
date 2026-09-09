@@ -1,5 +1,5 @@
 @if (usersList()) {
-  <div class="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
+  <div class="max-w-5xl mx-auto px-3 sm:px-6 py-16 sm:py-16 space-y-6">
     <!-- Header Section Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
       <!-- Cover Banner -->
@@ -123,7 +123,9 @@
         <!-- About Me & Quick Stats Section -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
           <!-- About Me Card -->
-          <div class="lg:col-span-2 bg-slate-50/80 border border-slate-200/80 rounded-xl p-4 sm:p-5">
+          <div
+            class="lg:col-span-2 bg-slate-50/80 border border-slate-200/80 rounded-xl p-4 sm:p-5"
+          >
             <h2
               class="flex items-center gap-2 text-base font-bold text-slate-800 mb-3 pb-2 border-b border-slate-200/60"
             >
@@ -259,5 +261,13 @@
         }
       }
     </div>
+  </div>
+}
+@defer {
+  <div class="Container p-4 m-3 shadow rounded bg-sky-600">
+    <p class="text-center text-xl">
+      I think U in <span class="text-red-900 text-2xl">M</span
+      ><span class="text-white text-2xl">as</span><span class="text-black text-2xl">r</span>
+    </p>
   </div>
 }

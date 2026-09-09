@@ -1,8 +1,9 @@
-<div class="bg-gray-200">
+<div class="bg-gray-200 py-16">
   <div class="container bg-white p-3 shadow my-3 rounded">
     <div class="flex justify-between align-center">
       <h1 class="font-bold text-xl">Notifications</h1>
-      <button (click)="makeAllasRead()"
+      <button
+        (click)="makeAllasRead()"
         class="bg-gray-100 text-xs font-bold px-2 py-2 shadow rounded cursor-pointer hover:bg-gray-200 transition-all duration-200 text-lg"
       >
         <i class="fa fa-check-double"></i> Mark all read
@@ -33,45 +34,50 @@
       </button>
     </div>
 
-    <hr class="mt-2 text-gray-200">
-    @for(noti of notifications() ; track noti._id) {
-      
-  @if (!flag || !noti.isRead) {
-      <div class="mt-2 mb-1 rounded p-3 " [class]="noti.isRead ? 'bg-gray-100' : 'bg-blue-50'">
-        <div class="flex flex-wrap justify-between align-center p-2 gap-2">
+    <hr class="mt-2 text-gray-200" />
+    @for (noti of notifications(); track noti._id) {
+      @if (!flag || !noti.isRead) {
+        <div class="mt-2 mb-1 rounded p-3" [class]="noti.isRead ? 'bg-gray-100' : 'bg-blue-50'">
+          <div class="flex flex-wrap justify-between align-center p-2 gap-2">
             <div class="flex flex-wrap align-center gap-2">
-                <img class="w-10 h-10 rounded-full" [src]="noti.actor.photo" [alt]="noti.actor.name">
-                <div class="flex flex-col">
-                    <div class="flex flex-wrap justify-between align-center gap-1 ">
-                        <span class="font-semibold">{{noti.actor.name}}</span>
-                    <span class="text-xs text-gray-500 mt-1">{{noti.type}} your post</span>
-                    </div>
-                    <span class="text-xs text-gray-500">{{noti.entity.body.slice(0,30)}}</span>
-                    @if(noti.isRead){
-                        <span class="bg-blue-50 text-green-600 px-2 py-1 w-fit rounded text-xs mt-1 "><i class="fa fa-check"></i> read</span>
-                    }@else{
-                        <span (click)="makeNotificationAsRead(noti._id)" class="bg-sky-200  px-2 py-1 w-fit rounded cursor-pointer rounded shadow text-xs mt-1">Mark as read</span>
-                    }    
+              <img
+                class="w-10 h-10 rounded-full"
+                [src]="noti.actor.photo"
+                [alt]="noti.actor.name"
+              />
+              <div class="flex flex-col">
+                <div class="flex flex-wrap justify-between align-center gap-1">
+                  <span class="font-semibold">{{ noti.actor.name }}</span>
+                  <span class="text-xs text-gray-500 mt-1">{{ noti.type }} your post</span>
                 </div>
-                
-                
+                <span class="text-xs text-gray-500">{{ noti.entity.body.slice(0, 30) }}</span>
+                @if (noti.isRead) {
+                  <span class="bg-blue-50 text-green-600 px-2 py-1 w-fit rounded text-xs mt-1"
+                    ><i class="fa fa-check"></i> read</span
+                  >
+                } @else {
+                  <span
+                    (click)="makeNotificationAsRead(noti._id)"
+                    class="bg-sky-200 px-2 py-1 w-fit rounded cursor-pointer rounded shadow text-xs mt-1"
+                    >Mark as read</span
+                  >
+                }
+              </div>
             </div>
             <div class="">
-                <span class="text-xs text-gray-500 p-2">{{noti.createdAt | date: 'shortTime'}} <i class="fa-solid fa-circle text-blue-500 text-[6px]"></i>
-            </span>
+              <span class="text-xs text-gray-500 p-2"
+                >{{ noti.createdAt | date: 'shortTime' }}
+                <i class="fa-solid fa-circle text-blue-500 text-[6px]"></i>
+              </span>
             </div>
-
+          </div>
         </div>
-    </div>
-
-  }
-
-    }@empty {
-    <div class="text-center py-10 text-gray-500">
-      <i class="fa-regular fa-bell text-4xl mb-3 block text-gray-300"></i>
-      No notifications found.
-    </div>
+      }
+    } @empty {
+      <div class="text-center py-10 text-gray-500">
+        <i class="fa-regular fa-bell text-4xl mb-3 block text-gray-300"></i>
+        No notifications found.
+      </div>
     }
-    
   </div>
 </div>
