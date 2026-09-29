@@ -61,6 +61,17 @@ postList: WritableSignal<any[]> = signal([]);
     })  
   }
 
+  onPostUnsaved(postId: string) {
+    this.savedpostlist.update((posts) => posts.filter((p) => p._id !== postId));
+    this.usersList.update((user) =>
+      user ? { ...user, bookmarksCount: Math.max(0, (user.bookmarksCount || 1) - 1) } : user
+    );
+  }
+
+  onPostDeleted(postId: string) {
+    this.postList.update((posts) => posts.filter((p) => p._id !== postId));
+  }
+
   photo : File | null = null;
   selectFile(event: any) {
     if(event.target.files.length > 0){

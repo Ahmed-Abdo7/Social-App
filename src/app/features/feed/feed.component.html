@@ -3,6 +3,7 @@
     <app-create-post
       [username]="name()"
       [photo]="photo()"
+      (postCreated)="getAllPost()"
       class="order-1"
       ngSkipHydration
     ></app-create-post>
@@ -26,7 +27,13 @@
     <!-- Posts container displayed after suggestions using order-3 -->
     <div class="w-full lg:w-2/3 mx-auto mt-6 order-3">
       @for (post of postList(); track post._id) {
-        <app-single-post [post]="post" ngSkipHydration></app-single-post>
+        <app-single-post
+          [post]="post"
+          [currentUserId]="userId()"
+          (postShared)="getAllPost()"
+          (postDeleted)="onPostDeleted($event)"
+          ngSkipHydration
+        ></app-single-post>
       }
     </div>
   </div>

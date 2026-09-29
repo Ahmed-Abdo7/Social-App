@@ -27,4 +27,10 @@ export class PostsServer {
     putPostBookMark(postId : string):Observable<any>{
         return this.httpClient.put<any>(`${environment.base_url}/posts/${postId}/bookmark`, {});
     }
+    deletePost(postId : string):Observable<any>{
+        return this.httpClient.delete<any>(`${environment.base_url}/posts/${postId}`);
+    }
+    sherePost(postId : string):Observable<any>{
+        return this.httpClient.post<any>(`${environment.base_url}/posts/${postId}/share`, {});
+    }
 }

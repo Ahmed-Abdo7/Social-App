@@ -2,6 +2,7 @@ import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommentsServer } from '../../../../core/services/comments/comments.server';
 import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
+import { ProfileServer } from '../../../../features/services/profile.server';
 
 @Component({
   selector: 'app-comments',
@@ -11,12 +12,30 @@ import { FormControl, FormGroup, Validators, ɵInternalFormsSharedModule, Reacti
 })
 export class CommentsComponent implements OnInit  {
   private readonly commentsServer = inject(CommentsServer); 
+  private readonly profileService = inject(ProfileServer);
   @Input() postId!:string;
   comments = signal<any[]>([]);
 
   ngOnInit(): void {
     this.getAllComments(this.postId);
+    this.getPhoto();
   }
+ photo = signal<string>('');
+
+
+  
+  getPhoto(){
+    this.profileService.getProfile().subscribe({
+      next: (res) => {
+        // تحديث الـ Signal فوراً ليتم تحديث الـ DOM تلقائياً
+        this.photo.set(res.data.user.photo);
+      },
+      error: (err) => {
+        console.error('Error fetching profile photo:', err);
+      }
+    });
+  }
+  
   getAllComments(postId:string){
     this.commentsServer.getPostComments(postId).subscribe({
       next:(response)=>{
@@ -80,6 +99,10 @@ onFileSelected(e: Event) {
      }
   })
   }
+
+
+   
+  
 }
 
   

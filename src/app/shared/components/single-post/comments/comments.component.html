@@ -29,7 +29,7 @@
     <form [formGroup]= "createComment"   (submit)="createCommentSubmit($event)"  >
       <div class="flex gap-3 items-start">
         <!-- صورة المستخدم (تقدر تغير الـ src بتاعها) -->
-              <img class=" w-12 h-12 rounded-full " src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="">
+              <img class=" w-12 h-12 rounded-full " [src]="photo()" alt="">
 
         <!-- حاوية الإدخال (Input Container) -->
         <div class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm">

@@ -229,7 +229,11 @@
     <div>
       @if (mypostsflag()) {
         @if (postList().length > 0) {
-          <app-card-post [postList]="postList()"></app-card-post>
+          <app-card-post
+            [postList]="postList()"
+            [isSaved]="false"
+            (postDeleted)="onPostDeleted($event)"
+          ></app-card-post>
         } @else {
           <div
             class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center shadow-sm my-4"
@@ -245,7 +249,11 @@
         }
       } @else if (savedpostflag()) {
         @if (savedpostlist().length > 0) {
-          <app-card-post [postList]="savedpostlist()"></app-card-post>
+          <app-card-post
+            [postList]="savedpostlist()"
+            [isSaved]="true"
+            (postUnsaved)="onPostUnsaved($event)"
+          ></app-card-post>
         } @else {
           <div
             class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center shadow-sm my-4"

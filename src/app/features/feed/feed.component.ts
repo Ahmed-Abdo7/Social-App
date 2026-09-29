@@ -25,6 +25,7 @@ export class FeedComponent implements OnInit{
 
     name: WritableSignal<string> = signal('');
     photo: WritableSignal<string> = signal('');
+    userId: WritableSignal<string> = signal('');
    
  ngOnInit() {
     // تشغيل جلب المنشورات فقط في المتصفح
@@ -41,6 +42,7 @@ export class FeedComponent implements OnInit{
     next: (res) => {
        this.name.set(res.data.user.name);
        this.photo.set(res.data.user.photo);
+       this.userId.set(res.data.user._id);
     },
   })
 }
@@ -49,9 +51,17 @@ export class FeedComponent implements OnInit{
     this.postServer.getAllPost().subscribe({
       next:(res)=>{
         this.postList.set(res.data.posts);
+        setTimeout(() => {
+          initFlowbite();
+        }, 50);
       }
     })
   }
+
+  onPostDeleted(postId: string) {
+    this.postList.update((posts) => posts.filter((p) => p._id !== postId));
+  }
+
   getunreadCoutNotifications(){
     this.notificationsServer.getUnreadCount().subscribe({
       next(res) {

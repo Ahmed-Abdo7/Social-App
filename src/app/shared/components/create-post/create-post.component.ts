@@ -1,5 +1,5 @@
 
-import { afterNextRender, Component, inject, Input } from '@angular/core';
+import { afterNextRender, Component, inject, Input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,8 @@ export class CreatePostComponent {
     private readonly toasts = inject(ToastrService);
 
  @Input() username: string = '';
-@Input() photo: string = '';
+ @Input() photo: string = '';
+ postCreated = output<void>();
 
     
     constructor() {
@@ -56,6 +57,7 @@ onSubmit(e : Event){
       this.createForm.reset();
       this.uploadFile = null;
       this.isSlected = false;
+      this.postCreated.emit();
     }
 
     }

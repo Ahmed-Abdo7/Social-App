@@ -8,9 +8,17 @@
         alt="User avatar"
       />
       <div>
-        <h3 class="text-sm font-bold text-gray-900 leading-tight hover:underline cursor-pointer">
-          {{ post().user.name }}
-        </h3>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="text-sm font-bold text-gray-900 leading-tight hover:underline cursor-pointer">
+            {{ post().user.name }}
+          </h3>
+          @if (post().isShare || post().sharedPost) {
+            <span class="text-xs text-blue-600 flex items-center gap-1 font-medium bg-blue-50 px-2 py-0.5 rounded-full">
+              <i class="fa-solid fa-share text-[10px]"></i>
+              shared a post
+            </span>
+          }
+        </div>
         <div class="flex items-center gap-1.5 text-xs text-gray-500 mt-0.5">
           <span class="hover:underline cursor-pointer">&#64;{{ post().user.username }}</span>
           <span>•</span>
@@ -46,33 +54,88 @@
         <li>
           <a
             (click)="putBookMark(post()._id)"
-            class="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
+            class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
           >
             <i
               class="fa-regular fa-bookmark"
               [class.fa-solid]="isBookmarked()"
               [class.text-primary]="isBookmarked()"
-            ></i
-            >{{ isBookmarked() ? 'Unsave Post' : 'Save Post' }}
+            ></i>
+            <span>{{ isBookmarked() ? 'Unsave Post' : 'Save Post' }}</span>
           </a>
         </li>
+        @if (post().user._id === currentUserId()) {
+          <li>
+            <a
+              (click)="deletePost(post()._id)"
+              class="flex items-center gap-2 px-4 py-2 text-rose-600 hover:bg-rose-50 cursor-pointer"
+            >
+              <i class="fa-solid fa-trash-can text-sm"></i>
+              <span>Delete Post</span>
+            </a>
+          </li>
+        }
       </ul>
     </div>
   </div>
 
   <!-- Post Body Content -->
-  <div class="px-4 pb-3">
-    <p class="text-[15px] text-gray-900 leading-normal whitespace-pre-wrap">{{ post().body }}</p>
-  </div>
+  @if (post().body) {
+    <div class="px-4 pb-3">
+      <p class="text-[15px] text-gray-900 leading-normal whitespace-pre-wrap">{{ post().body }}</p>
+    </div>
+  }
 
   <!-- Post Image -->
   @if (post().image) {
-    <div class="w-full overflow-hidden bg-gray-50 border-y border-gray-100">
+    <div class="w-full overflow-hidden bg-gray-50 border-y border-gray-100 mb-3">
       <img
         [src]="post().image"
         alt="Post attachment"
         class="w-full h-auto max-h-[500px] object-cover hover:scale-[1.005] transition-transform duration-300"
       />
+    </div>
+  }
+
+  <!-- Shared Post Embedded Card -->
+  @if (post().sharedPost; as shared) {
+    <div class="mx-4 mb-3 border border-gray-200 rounded-xl overflow-hidden bg-slate-50/60 shadow-xs">
+      <!-- Original Author Header -->
+      <div class="flex items-center gap-2.5 p-3 pb-2">
+        <img
+          class="w-8 h-8 rounded-full object-cover border border-gray-100"
+          [src]="shared.user?.photo || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'"
+          alt="Original author"
+        />
+        <div>
+          <h4 class="text-xs font-bold text-gray-900 leading-tight">
+            {{ shared.user?.name }}
+          </h4>
+          <div class="flex items-center gap-1 text-[11px] text-gray-500">
+            <span>&#64;{{ shared.user?.username }}</span>
+            <span>•</span>
+            <span>{{ shared.createdAt | date: 'd MMM' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Original Post Body -->
+      @if (shared.body) {
+        <div class="px-3 pb-2.5">
+          <p class="text-sm text-gray-800 leading-normal whitespace-pre-wrap">{{ shared.body }}</p>
+        </div>
+      }
+
+      <!-- Original Post Image -->
+      @if (shared.image) {
+        <div class="w-full overflow-hidden bg-gray-100 border-t border-gray-200">
+          <img
+            [src]="shared.image"
+            alt="Shared post attachment"
+            class="w-full h-auto max-h-[400px] object-cover"
+          />
+        </div>
+      }
     </div>
   }
 
@@ -126,7 +189,8 @@
       <i class="fa-regular fa-comment text-base"></i>
       <span>Comment</span>
     </button>
-    <button
+    <button 
+    (click)="sherePost(post()._id)"
       class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
     >
       <i class="fa-solid fa-share text-base"></i>
@@ -212,7 +276,7 @@
                   <img
                     class="w-11 h-11 rounded-full object-cover border border-gray-100 shadow-sm transition-transform duration-300 group-hover:scale-105"
                     [src]="
-                      like.photo || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'
+                      like.photo
                     "
                     alt="User avatar"
                   />
