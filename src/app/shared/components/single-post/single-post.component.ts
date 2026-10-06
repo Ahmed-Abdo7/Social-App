@@ -7,6 +7,8 @@ import { PostsServer } from '../../../core/services/post/posts.server';
 import { FollowingServer } from '../../../features/services/following.server';
 import { CommentsComponent } from './comments/comments.component';
 import { ToastrService } from 'ngx-toastr';
+import { ProfileServer } from '../../../features/services/profile.server';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-single-post',
@@ -22,8 +24,9 @@ export class SinglePostComponent  {
     });
   }
 
-
+ private readonly router = inject(Router);
   private readonly followingServer = inject(FollowingServer);
+  private readonly profileServer = inject(ProfileServer);
   private readonly postsService = inject(PostsServer);
   private readonly toastr = inject(ToastrService);
   post = input.required<Post>();
@@ -107,5 +110,11 @@ export class SinglePostComponent  {
       }
     });
   }
+
+  goToProfile(userId: string) {
+  if (userId) {
+    this.router.navigate(['/profile', userId]);
+  }
+}
 }
 

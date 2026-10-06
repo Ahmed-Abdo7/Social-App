@@ -26,5 +26,13 @@ export class ProfileServer {
     updateProfilePhoto(photo:any):Observable<any>{
         return this.httpClient.put<any>(environment.base_url+ "/users/upload-photo",photo);
     }
+
+    updateCoverPhoto(cover:any):Observable<any>{
+        return this.httpClient.put<any>(environment.base_url+ "/users/upload-cover",cover);
+    }
+
+    getUserProfile(userId:string):Observable<any>{
+      return this.httpClient.get<any>(environment.base_url+ `/users/${userId}/profile`);
+    }
 }
 

@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'profile/:id',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'notifications',
     renderMode: RenderMode.Client
   },

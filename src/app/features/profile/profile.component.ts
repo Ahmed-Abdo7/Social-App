@@ -1,7 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, OnInit, PLATFORM_ID, signal, WritableSignal } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { CardPostComponent } from "../../shared/components/card-post/card-post.component";
 import { ProfileServer } from '../services/profile.server';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -10,29 +12,63 @@ import { ProfileServer } from '../services/profile.server';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit{
-  private readonly profileServer =inject(ProfileServer); 
-  flag: boolean = false ;
+  private readonly profileServer = inject(ProfileServer); 
+  private readonly toastr = inject(ToastrService);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  flag: boolean = false;
+  isUploadingCover = signal<boolean>(false);
+  isUploadingPhoto = signal<boolean>(false);
+
   toggle(){
-    this.flag=!this.flag;
-    
+    this.flag = !this.flag;
   }
-    private readonly platformId = inject(PLATFORM_ID);
-usersList = signal<any>(null);
-ngOnInit(): void {
-    // 🟢 تشغيل الطلب فقط في المتصفح أينما يوجد token في localStorage
-    if (isPlatformBrowser(this.platformId)) {
-      this.profileServer.getProfile().subscribe({
-        next: (res: any) => {
-          this.usersList.set(res.data.user);
-          this.getPostByUser(this.usersList()?._id);
-          
-        }
-      });
-      this.getSavedPosts();
-    }
-    
+
+  usersList = signal<any>(null);
+  isMyProfile = signal<boolean>(true);
+
+
+ ngOnInit(): void {
+  if (isPlatformBrowser(this.platformId)) {
+    this.activatedRoute.paramMap.subscribe((params) => {
+      const userId = params.get('id');
+
+      if (userId) {
+
+        
+        this.profileServer.getUserProfile(userId).subscribe({
+          next: (res: any) => {
+            const userData = res.data?.user || res.data || res.user;
+            this.usersList.set(userData);
+
+            
+            this.getPostByUser(userId);
+
+            
+            this.isMyProfile.set(false); 
+          },
+          error: (err) => {
+            this.toastr.error('Failed to load profile', 'Social App');
+          }
+        });
+      } else {
+      
+        this.isMyProfile.set(true);
+        this.profileServer.getProfile().subscribe({
+          next: (res: any) => {
+            this.usersList.set(res.data.user);
+            this.getPostByUser(this.usersList()?._id);
+          }
+        });
+        this.getSavedPosts();
+      }
+    });
   }
-postList: WritableSignal<any[]> = signal([]);
+}
+
+  private readonly activatedRoute = inject(ActivatedRoute);
+
+  postList: WritableSignal<any[]> = signal([]);
   getPostByUser(userId:string){
     this.profileServer.getMyPosts(userId).subscribe({
       next:(res:any)=>{
@@ -52,6 +88,7 @@ postList: WritableSignal<any[]> = signal([]);
     this.savedpostflag.set(true);
     this.mypostsflag.set(false);
   }
+
   savedpostlist = signal<any[]>([]);
   getSavedPosts(){
     this.profileServer.getSavedPosts().subscribe({
@@ -72,23 +109,59 @@ postList: WritableSignal<any[]> = signal([]);
     this.postList.update((posts) => posts.filter((p) => p._id !== postId));
   }
 
-  photo : File | null = null;
-  selectFile(event: any) {
-    if(event.target.files.length > 0){
-      this.photo = event.target.files[0];
-      this.updateProfilePhoto();
+  selectCoverFile(event: any) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.updateCoverPhoto(file);
     }
+    event.target.value = '';
   }
 
-  updateProfilePhoto(){
+  updateCoverPhoto(file: File) {
+    this.isUploadingCover.set(true);
     const formData = new FormData();
-    formData.append('photo', this.photo || '');
-    this.profileServer.updateProfilePhoto(formData).subscribe({
-      next:(res:any)=>{
-        console.log(res);
+    formData.append('cover', file);
+
+    this.profileServer.updateCoverPhoto(formData).subscribe({
+      next: (res: any) => {
+        this.isUploadingCover.set(false);
+        if (res.data?.cover) {
+          this.usersList.update((user) => (user ? { ...user, cover: res.data.cover } : user));
+        }
+        this.toastr.success(res.message || 'Cover photo updated successfully', 'Social App');
+      },
+      error: (err: any) => {
+        this.isUploadingCover.set(false);
+        this.toastr.error(err?.error?.message || 'Failed to update cover photo', 'Social App');
       }
-    })
+    });
   }
 
+  selectFile(event: any) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.updateProfilePhoto(file);
+    }
+    event.target.value = '';
+  }
 
+  updateProfilePhoto(file: File) {
+    this.isUploadingPhoto.set(true);
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    this.profileServer.updateProfilePhoto(formData).subscribe({
+      next: (res: any) => {
+        this.isUploadingPhoto.set(false);
+        if (res.data?.photo) {
+          this.usersList.update((user) => (user ? { ...user, photo: res.data.photo } : user));
+        }
+        this.toastr.success(res.message || 'Profile photo updated successfully', 'Social App');
+      },
+      error: (err: any) => {
+        this.isUploadingPhoto.set(false);
+        this.toastr.error(err?.error?.message || 'Failed to update profile photo', 'Social App');
+      }
+    });
+  }
 }

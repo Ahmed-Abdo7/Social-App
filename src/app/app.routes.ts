@@ -51,7 +51,12 @@ export const routes: Routes = [
                 path : 'change-password',
                 loadComponent : () => import('./features/change-password/change-password.component').then(m => m.ChangePasswordComponent) ,
                 title : 'Change Password'
-            }
+            }, 
+            {
+                path : 'profile/:id',
+                loadComponent : () => import('./features/profile/profile.component').then(m => m.ProfileComponent) ,
+                title : 'Profile'
+            }   
         ]
     }
     , {
