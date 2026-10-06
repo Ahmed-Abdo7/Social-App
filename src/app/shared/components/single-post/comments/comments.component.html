@@ -1,73 +1,94 @@
-<div class="bg-[#F7F8FA] h-fit p-4 w-full mt-2 rounded-md ">
-    <div class="bg-white my-3  p-4 rounded-md shadow ">
-        <p class="text-gray-600 text-sm font-bold  ">Comments <span class="text-gray-600 bg-sky-100 rounded-full p-1 text-xs mx-2">{{comments().length}}</span></p>
+<div class="bg-slate-50/80 border-t border-slate-100 p-4 w-full">
+  <!-- Comments Count Header -->
+  <div class="flex items-center justify-between mb-3.5">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Comments</span>
+      <span class="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100/60 rounded-full px-2 py-0.5">
+        {{ comments().length }}
+      </span>
     </div>
-       @for(comment of comments(); track comment._id){
-        <div class="flex flex-wrap justify-start mb-3 bg-[#F7F8FA] h-fit p-4  rounded-md ">
-         <div class="w-10 h-10 rounded-full ">
-            <img [src]="comment.commentCreator.photo" [alt]="comment.commentCreator.name">
-        </div>
-        <div class="flex-1 flex flex-col justify-start ">
-            <div class="bg-[#F0F2F5] p-2 rounded-md w-fit ">
-                <h3 class="font-semibold text-md">{{comment.commentCreator.name}}</h3>
-                <p>{{comment.content}}</p>
-                @if(comment.image){
-                    <div class=" w-[300px] h-fit">
-                        <img  [src]="comment.image" alt="">
-                    </div>
-                }
+  </div>
+
+  <!-- Comments List -->
+  <div class="space-y-3 mb-4">
+    @for (comment of comments(); track comment._id) {
+      <div class="flex items-start gap-3">
+        <img
+          class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200 shrink-0 mt-0.5"
+          [src]="comment.commentCreator.photo || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'"
+          [alt]="comment.commentCreator.name"
+        />
+        <div class="flex-1 min-w-0">
+          <div class="bg-white border border-slate-200/70 p-3 rounded-2xl shadow-2xs">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <h4 class="font-semibold text-xs text-slate-900 truncate">{{ comment.commentCreator.name }}</h4>
+              <span class="text-[10px] text-slate-400 shrink-0">{{ comment.createdAt | date: 'd MMM' }}</span>
             </div>
-            <div class="flex gap-4 ">
-                <button class="text-gray-600 hover:text-blue-600 text-sm">{{comment.createdAt | date:'d MMM'}}</button>
-                <button (click)="putLikeToComment(postId , comment._id)" class="text-gray-600 hover:text-blue-600 text-sm"> Like  ({{ comment.likesCount ?? comment.likes?.length ?? 0 }})</button>
-                <button class="text-gray-600 hover:text-blue-600 text-sm">Reply</button>  
-            </div>
-        </div>       
-    </div>
-}
-    <!-- 2. مربع كتابة الكومنت -->
-    <form [formGroup]= "createComment"   (submit)="createCommentSubmit($event)"  >
-      <div class="flex gap-3 items-start">
-        <!-- صورة المستخدم (تقدر تغير الـ src بتاعها) -->
-              <img class=" w-12 h-12 rounded-full " [src]="photo()" alt="">
-
-        <!-- حاوية الإدخال (Input Container) -->
-        <div class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl p-3 shadow-sm">
-
-          <!-- مكان الكتابة -->
-          <!-- ضفنا focus:outline-none و focus:ring-0 -->
-          <textarea formControlName="content" rows="2" 
-            class="w-full bg-transparent resize-none outline-none focus:outline-none focus:ring-0 border-none text-slate-700 placeholder-slate-500 text-sm"
-            placeholder="Comment as Ahmed Abdo..."></textarea>
-
-          <!-- الشريط السفلي (الأيقونات وزرار الإرسال) -->
-          <!-- الأيقونات اللي على الشمال -->
-          <div class="flex gap-3 text-slate-500 items-center justify-between ">
-
-            <!-- زرار الصورة بعد التعديل -->
-            <div class="flex flex-wrap gap-2">
-              <!-- الإنبوت المخفي -->
-              <input   type="file" id="commentImage" class="hidden" accept="image/*" (change)="onFileSelected($event)">
-              <!-- الـ Label اللي بيشغل الإنبوت لما تدوس عليه -->
-              <label for="commentImage" class="hover:text-blue-500 transition-colors cursor-pointer flex items-center">
-                <i class="fa-regular fa-image text-lg"></i>
-              </label>
-              <!-- زرار السمايل (الإيموجي) -->
-              <button class="hover:text-blue-500 transition-colors cursor-pointer flex items-center">
-                <i class="fa-regular fa-face-smile text-lg"></i>
-              </button>
-            </div>
-
-
-            <!-- زرار الإرسال على اليمين -->
-            <div class="flex justify-end mt-2">
-              <button type="submit"
-                class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold hover:bg-blue-600 transition-colors">Post</button>
-            </div>
-
+            <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">{{ comment.content }}</p>
+            @if (comment.image) {
+              <div class="mt-2 rounded-xl overflow-hidden max-w-xs border border-slate-100">
+                <img [src]="comment.image" alt="Comment attachment" class="w-full h-auto object-cover" />
+              </div>
+            }
           </div>
-
+          <!-- Comment Actions -->
+          <div class="flex items-center gap-3 text-[11px] text-slate-500 mt-1 ml-2 font-medium">
+            <button
+              (click)="putLikeToComment(postId, comment._id)"
+              class="hover:text-blue-600 transition-colors cursor-pointer"
+            >
+              Like ({{ comment.likesCount ?? comment.likes?.length ?? 0 }})
+            </button>
+            <button class="hover:text-blue-600 transition-colors cursor-pointer">
+              Reply
+            </button>
+          </div>
         </div>
       </div>
-    </form>
+    }
+  </div>
+
+  <!-- Write Comment Box -->
+  <form [formGroup]="createComment" (submit)="createCommentSubmit($event)">
+    <div class="flex gap-2.5 items-start">
+      <img
+        class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200 shrink-0 mt-1"
+        [src]="photo() || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'"
+        alt="Your profile"
+      />
+      <div class="flex-1 bg-white border border-slate-200/80 rounded-2xl p-2.5 shadow-2xs focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all">
+        <textarea
+          formControlName="content"
+          rows="2"
+          class="w-full bg-transparent resize-none border-none outline-none focus:outline-none focus:ring-0 text-slate-800 placeholder:text-slate-400 text-xs leading-relaxed"
+          placeholder="Write a comment..."
+        ></textarea>
+        <div class="flex items-center justify-between pt-1.5 border-t border-slate-100">
+          <div class="flex items-center gap-1">
+            <input type="file" id="commentImage" class="hidden" accept="image/*" (change)="onFileSelected($event)" />
+            <label
+              for="commentImage"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+              title="Add image"
+            >
+              <i class="fa-regular fa-image text-sm"></i>
+            </label>
+            <button
+              type="button"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 transition-colors cursor-pointer"
+              title="Add emoji"
+            >
+              <i class="fa-regular fa-face-smile text-sm"></i>
+            </button>
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1 rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+          >
+            Reply
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

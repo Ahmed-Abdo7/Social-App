@@ -1,65 +1,66 @@
-<div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden mb-5">
-  <!-- User Header -->
+<div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden mb-5">
+  <!-- Author Header -->
   <div class="flex items-center justify-between p-4 pb-3">
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 min-w-0">
       <img
-        class="w-10 h-10 rounded-full object-cover border border-gray-100"
+        class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-100 shadow-xs"
         [src]="post().user.photo || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'"
         alt="User avatar"
       />
-      <div>
+      <div class="min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
-          <h3 class="text-sm font-bold text-gray-900 leading-tight hover:underline cursor-pointer">
+          <h3 class="text-sm font-semibold text-slate-900 leading-tight hover:underline cursor-pointer truncate">
             {{ post().user.name }}
           </h3>
           @if (post().isShare || post().sharedPost) {
-            <span class="text-xs text-blue-600 flex items-center gap-1 font-medium bg-blue-50 px-2 py-0.5 rounded-full">
-              <i class="fa-solid fa-share text-[10px]"></i>
+            <span class="text-[11px] text-blue-600 flex items-center gap-1 font-semibold bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/60">
+              <i class="fa-solid fa-share text-[9px]"></i>
               shared a post
             </span>
           }
         </div>
-        <div class="flex items-center gap-1.5 text-xs text-gray-500 mt-0.5">
+        <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
           <span class="hover:underline cursor-pointer">&#64;{{ post().user.username }}</span>
           <span>•</span>
           <span>{{ post().createdAt | date: 'd MMM' }}</span>
           <span>•</span>
-          <span class="flex items-center gap-1">
+          <span class="flex items-center gap-1 text-slate-400">
             <i class="fa-solid fa-earth-americas text-[10px]"></i>
             <span>Public</span>
-            <i class="fa-solid fa-chevron-down text-[8px] ml-0.5"></i>
           </span>
         </div>
       </div>
     </div>
 
+    <!-- Dropdown Trigger Icon -->
     <button
       [id]="'dropdownDefaultButton-' + post()._id"
       [attr.data-dropdown-toggle]="'dropdown-' + post()._id"
-      class="inline-flex items-center justify-center text-gray-600 cursor-pointer bg-gray-100 hover:bg-gray-200 shadow-xs font-medium leading-5 rounded text-sm px-2 py-1.5 focus:outline-none"
+      class="hover:bg-slate-100 rounded-full p-1.5 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer focus:outline-none"
       type="button"
+      aria-label="Post actions"
     >
-      <i class="fa-solid fa-ellipsis"></i>
+      <i class="fa-solid fa-ellipsis text-sm"></i>
     </button>
 
-    <!-- Dropdown menu -->
+    <!-- Dropdown Menu -->
     <div
       [id]="'dropdown-' + post()._id"
-      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 border border-gray-100"
+      class="z-10 hidden bg-white divide-y divide-slate-100 rounded-2xl shadow-lg w-44 border border-slate-100 overflow-hidden"
     >
       <ul
-        class="py-2 text-sm text-gray-700 font-medium"
+        class="py-1.5 text-xs text-slate-700 font-medium"
         [attr.aria-labelledby]="'dropdownDefaultButton-' + post()._id"
       >
         <li>
           <a
             (click)="putBookMark(post()._id)"
-            class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
+            class="flex items-center gap-2.5 px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 cursor-pointer transition-colors"
           >
             <i
-              class="fa-regular fa-bookmark"
+              class="fa-regular fa-bookmark text-sm"
               [class.fa-solid]="isBookmarked()"
-              [class.text-primary]="isBookmarked()"
+              [class.text-blue-600]="isBookmarked()"
             ></i>
             <span>{{ isBookmarked() ? 'Unsave Post' : 'Save Post' }}</span>
           </a>
@@ -68,7 +69,7 @@
           <li>
             <a
               (click)="deletePost(post()._id)"
-              class="flex items-center gap-2 px-4 py-2 text-rose-600 hover:bg-rose-50 cursor-pointer"
+              class="flex items-center gap-2.5 px-3.5 py-2 text-rose-600 hover:bg-rose-50 cursor-pointer transition-colors"
             >
               <i class="fa-solid fa-trash-can text-sm"></i>
               <span>Delete Post</span>
@@ -82,36 +83,36 @@
   <!-- Post Body Content -->
   @if (post().body) {
     <div class="px-4 pb-3">
-      <p class="text-[15px] text-gray-900 leading-normal whitespace-pre-wrap">{{ post().body }}</p>
+      <p class="text-slate-800 text-[15px] leading-relaxed whitespace-pre-wrap">{{ post().body }}</p>
     </div>
   }
 
   <!-- Post Image -->
   @if (post().image) {
-    <div class="w-full overflow-hidden bg-gray-50 border-y border-gray-100 mb-3">
+    <div class="mx-4 mb-3 rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60 max-h-[500px]">
       <img
         [src]="post().image"
         alt="Post attachment"
-        class="w-full h-auto max-h-[500px] object-cover hover:scale-[1.005] transition-transform duration-300"
+        class="w-full h-auto max-h-[500px] object-cover hover:scale-[1.01] transition-transform duration-300"
       />
     </div>
   }
 
   <!-- Shared Post Embedded Card -->
   @if (post().sharedPost; as shared) {
-    <div class="mx-4 mb-3 border border-gray-200 rounded-xl overflow-hidden bg-slate-50/60 shadow-xs">
+    <div class="mx-4 mb-3 border border-slate-200/80 rounded-xl overflow-hidden bg-slate-50/70 hover:bg-slate-50 transition-colors">
       <!-- Original Author Header -->
       <div class="flex items-center gap-2.5 p-3 pb-2">
         <img
-          class="w-8 h-8 rounded-full object-cover border border-gray-100"
+          class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200"
           [src]="shared.user?.photo || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'"
           alt="Original author"
         />
-        <div>
-          <h4 class="text-xs font-bold text-gray-900 leading-tight">
+        <div class="min-w-0">
+          <h4 class="text-xs font-semibold text-slate-900 leading-tight truncate">
             {{ shared.user?.name }}
           </h4>
-          <div class="flex items-center gap-1 text-[11px] text-gray-500">
+          <div class="flex items-center gap-1 text-[11px] text-slate-400">
             <span>&#64;{{ shared.user?.username }}</span>
             <span>•</span>
             <span>{{ shared.createdAt | date: 'd MMM' }}</span>
@@ -122,17 +123,17 @@
       <!-- Original Post Body -->
       @if (shared.body) {
         <div class="px-3 pb-2.5">
-          <p class="text-sm text-gray-800 leading-normal whitespace-pre-wrap">{{ shared.body }}</p>
+          <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{{ shared.body }}</p>
         </div>
       }
 
       <!-- Original Post Image -->
       @if (shared.image) {
-        <div class="w-full overflow-hidden bg-gray-100 border-t border-gray-200">
+        <div class="w-full overflow-hidden bg-slate-100 border-t border-slate-200/60">
           <img
             [src]="shared.image"
             alt="Shared post attachment"
-            class="w-full h-auto max-h-[400px] object-cover"
+            class="w-full h-auto max-h-[350px] object-cover"
           />
         </div>
       }
@@ -140,63 +141,67 @@
   }
 
   <!-- Engagement Stats Row -->
-  <div class="px-4 py-3 flex items-center justify-between text-xs text-gray-500">
-    <!-- Likes -->
-    <div class="flex items-center gap-1.5">
-      <span class="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center text-white">
-        <i class="fa-solid fa-thumbs-up text-[9px]"></i>
+  <div class="px-4 py-2.5 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100">
+    <!-- Likes Badge -->
+    <button
+      (click)="getAllLikes(post()._id)"
+      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors cursor-pointer font-medium"
+    >
+      <span class="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center text-white text-[9px] shadow-xs">
+        <i class="fa-solid fa-thumbs-up"></i>
       </span>
-      <span
-        (click)="getAllLikes(post()._id)"
-        class="hover:underline cursor-pointer font-medium text-gray-600"
-      >
-        {{ post().likesCount + (isLiked() ? 1 : 0) }} likes
-      </span>
-    </div>
+      <span>{{ post().likesCount + (isLiked() ? 1 : 0) }} likes</span>
+    </button>
 
-    <!-- Shares / Comments / View Details -->
-    <div class="flex items-center gap-3 font-medium text-gray-600">
-      <span class="flex items-center gap-1">
-        <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+    <!-- Shares / Comments -->
+    <div class="flex items-center gap-3.5 text-slate-500 font-medium">
+      <span class="flex items-center gap-1 text-slate-400">
+        <i class="fa-solid fa-repeat text-[10px]"></i>
         <span>{{ post().sharesCount }} shares</span>
       </span>
-      <span class="hover:underline cursor-pointer"> {{ post().commentsCount }} comments </span>
-      <span class="text-blue-600 hover:underline cursor-pointer font-bold"> View details </span>
+      <button (click)="toggleCommentsModal()" class="hover:text-blue-600 transition-colors cursor-pointer">
+        {{ post().commentsCount }} comments
+      </button>
     </div>
   </div>
 
-  <!-- Divider Line -->
-  <hr class="border-gray-200 mx-4" />
-
-  <!-- Action Buttons -->
-  <div class="px-2 py-1 flex items-center justify-between">
+  <!-- Engagement Bar (Like, Comment, Share) -->
+  <div class="px-2 py-1.5 border-t border-slate-100 flex items-center justify-between gap-1">
+    <!-- Like Button (Blue Hover + Micro-interaction) -->
     <button
       (click)="putLike(post()._id)"
       [class.text-blue-600]="isLiked()"
-      class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+      [class.bg-blue-50]="isLiked()"
+      class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50/80 active:scale-95 transition-all duration-150 cursor-pointer"
     >
       <i
-        class="fa-regular fa-thumbs-up text-base"
+        class="fa-regular fa-thumbs-up text-sm transition-transform duration-150"
         [class.fa-solid]="isLiked()"
-        [class.text-blue-600]="isLiked()"
+        [class.scale-110]="isLiked()"
       ></i>
       <span>Like</span>
     </button>
+
+    <!-- Comment Button (Sky Hover + Micro-interaction) -->
     <button
       (click)="toggleCommentsModal()"
-      class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+      class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50/80 active:scale-95 transition-all duration-150 cursor-pointer"
     >
-      <i class="fa-regular fa-comment text-base"></i>
+      <i class="fa-regular fa-comment text-sm"></i>
       <span>Comment</span>
     </button>
-    <button 
-    (click)="sherePost(post()._id)"
-      class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+
+    <!-- Share Button (Emerald Hover + Micro-interaction) -->
+    <button
+      (click)="sherePost(post()._id)"
+      class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-emerald-600 hover:bg-emerald-50/80 active:scale-95 transition-all duration-150 cursor-pointer"
     >
-      <i class="fa-solid fa-share text-base"></i>
+      <i class="fa-solid fa-share text-sm"></i>
       <span>Share</span>
     </button>
   </div>
+
+  <!-- Comments Container -->
   <div class="bg-white h-fit w-full">
     @if (showCommentsModal()) {
       <app-comments [postId]="post()._id"></app-comments>
@@ -207,107 +212,91 @@
 @if (showLikesModal()) {
   <!-- Modal Overlay -->
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
     (click)="closeModal()"
   >
     <!-- Modal Card -->
     <div
-      class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-scale-in transition-all duration-300 mx-4 max-h-[80vh] flex flex-col"
+      class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-slate-100 overflow-hidden animate-scale-in transition-all duration-300 mx-4 max-h-[80vh] flex flex-col"
       (click)="$event.stopPropagation()"
     >
       <!-- Modal Header -->
       <div
-        class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/50"
+        class="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50/60"
       >
         <div class="flex items-center gap-2.5">
           <span
-            class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shadow-inner animate-pulse"
+            class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shadow-inner"
           >
             <i class="fa-solid fa-thumbs-up text-sm"></i>
           </span>
           <div>
-            <h3 class="text-sm font-bold text-gray-900 leading-tight">Likes</h3>
-            <span class="text-[11px] text-gray-500 font-medium"
+            <h3 class="text-sm font-bold text-slate-900 leading-tight">Likes</h3>
+            <span class="text-[11px] text-slate-500 font-medium"
               >People who reacted to this post</span
             >
           </div>
         </div>
         <button
           (click)="closeModal()"
-          class="text-gray-400 hover:text-gray-700 hover:bg-gray-200/60 p-1.5 rounded-full transition-all duration-200 cursor-pointer"
+          class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-full transition-all duration-200 cursor-pointer"
         >
-          <i class="fa-solid fa-xmark text-lg"></i>
+          <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
       <!-- Modal Body / Likes List -->
       <div
-        class="overflow-y-auto p-4 flex-1 min-h-[300px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300/60 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-400/80"
+        class="overflow-y-auto p-4 flex-1 min-h-[300px]"
       >
         @if (isLoadingLikes()) {
-          <!-- Loading Spinner -->
           <div class="flex flex-col items-center justify-center py-20 gap-3">
             <div
-              class="w-9 h-9 border-3 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"
+              class="w-8 h-8 border-2 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"
             ></div>
-            <span class="text-xs font-semibold text-gray-500 tracking-wider">Loading likes...</span>
+            <span class="text-xs font-medium text-slate-500">Loading likes...</span>
           </div>
         } @else if (likes().length === 0) {
-          <!-- Empty State -->
           <div class="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
             <div
-              class="w-14 h-14 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 mb-3 border border-gray-100 shadow-sm"
+              class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-2.5"
             >
-              <i class="fa-regular fa-thumbs-up text-xl animate-bounce"></i>
+              <i class="fa-regular fa-thumbs-up text-lg"></i>
             </div>
-            <p class="text-sm font-bold text-gray-900">No Likes Yet</p>
-            <p class="text-xs text-gray-400 mt-1 max-w-[200px]">
+            <p class="text-sm font-semibold text-slate-900">No Likes Yet</p>
+            <p class="text-xs text-slate-400 mt-0.5">
               Be the first to react to this post!
             </p>
           </div>
         } @else {
-          <!-- Likes List -->
-          <div class="flex flex-col gap-2.5 animate-fade-in">
+          <div class="flex flex-col gap-2 animate-fade-in">
             @for (like of likes(); track like._id) {
               <div
-                class="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group border border-transparent hover:border-gray-100"
+                class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 group"
               >
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 min-w-0">
                   <img
-                    class="w-11 h-11 rounded-full object-cover border border-gray-100 shadow-sm transition-transform duration-300 group-hover:scale-105"
-                    [src]="
-                      like.photo
-                    "
+                    class="w-10 h-10 rounded-full object-cover ring-1 ring-slate-200"
+                    [src]="like.photo || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'"
                     alt="User avatar"
                   />
                   <div class="min-w-0">
                     <h4
-                      class="text-sm font-bold text-gray-900 leading-tight truncate group-hover:text-blue-600 transition-colors"
+                      class="text-xs font-semibold text-slate-900 leading-tight truncate group-hover:text-blue-600 transition-colors"
                     >
                       {{ like.name }}
                     </h4>
-                    <p class="text-xs text-gray-400 leading-none mt-0.5">
+                    <p class="text-[11px] text-slate-400 leading-none mt-0.5 truncate">
                       &#64;{{ like.username }}
                     </p>
-                    <div class="flex items-center gap-1.5 mt-1.5 text-[10px] text-gray-500">
-                      <span
-                        class="bg-gray-100 px-1.5 py-0.5 rounded-md font-semibold text-gray-600 shadow-sm"
-                        >{{ like.followersCount || 0 }} followers</span
-                      >
-                      <span>•</span>
-                      <span
-                        class="bg-gray-100 px-1.5 py-0.5 rounded-md font-semibold text-gray-600 shadow-sm"
-                        >{{ like.followingCount || 0 }} following</span
-                      >
-                    </div>
                   </div>
                 </div>
 
                 <button
                   (click)="followUser(like._id)"
-                  class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-200 text-xs font-semibold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1 hover:shadow-md active:scale-95 shadow-sm"
+                  class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-1.5 rounded-full transition-all active:scale-95 cursor-pointer shadow-xs"
                 >
-                  <i class="fa-solid fa-user-plus text-[9px]"></i>
+                  <i class="fa-solid fa-user-plus text-[9px] mr-1"></i>
                   @if (!flag()) {
                     <span>Follow</span>
                   } @else if (flag()) {
