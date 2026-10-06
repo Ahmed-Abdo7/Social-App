@@ -41,16 +41,18 @@
           <div class="flex flex-wrap justify-between align-center p-2 gap-2">
             <div class="flex flex-wrap align-center gap-2">
               <img
-                class="w-10 h-10 rounded-full"
-                [src]="noti.actor.photo"
-                [alt]="noti.actor.name"
+                class="w-10 h-10 rounded-full object-cover"
+                [src]="noti.actor?.photo || 'https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png'"
+                [alt]="noti.actor?.name || 'User'"
               />
               <div class="flex flex-col">
                 <div class="flex flex-wrap justify-between align-center gap-1">
-                  <span class="font-semibold">{{ noti.actor.name }}</span>
-                  <span class="text-xs text-gray-500 mt-1">{{ noti.type }} your post</span>
+                  <span class="font-semibold">{{ noti.actor?.name }}</span>
+                  <span class="text-xs text-gray-500 mt-1">{{ getNotificationText(noti) }}</span>
                 </div>
-                <span class="text-xs text-gray-500">{{ noti.entity.body.slice(0, 30) }}</span>
+                @if (noti.entity?.body) {
+                  <span class="text-xs text-gray-500">{{ noti.entity.body.slice(0, 30) }}{{ noti.entity.body.length > 30 ? '...' : '' }}</span>
+                }
                 @if (noti.isRead) {
                   <span class="bg-blue-50 text-green-600 px-2 py-1 w-fit rounded text-xs mt-1"
                     ><i class="fa fa-check"></i> read</span

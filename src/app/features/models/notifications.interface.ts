@@ -34,16 +34,20 @@ export interface Actor {
 }
 
 export interface Entity {
-  _id: string
-  body: string
-  image: string
-  user: string
-  commentsCount: number
-  topComment: TopComment
-  sharesCount: number
-  likesCount: number
-  isShare: boolean
-  id: string
+  _id?: string
+  body?: string
+  image?: string
+  user?: string
+  commentsCount?: number
+  topComment?: TopComment
+  sharesCount?: number
+  likesCount?: number
+  isShare?: boolean
+  id?: string
+  name?: string
+  username?: string
+  photo?: string
+  [key: string]: any
 }
 
 export interface TopComment {
